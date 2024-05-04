@@ -1,0 +1,41 @@
+Connect the Azure CLI to the AKS cluster
+
+az aks get-credentials --resource-group <resource-group-name> --name <AKS-cluster-name>
+ E.g:-
+1.az aks get-credentials --resource-group GB-dev-rg --name GB-AKS
+ 
+Copy the Helm charts to local
+helm repo add <stable-Github-repo-URL>
+E.g:-
+2.helm repo add stable https://charts.helm.sh/stable
+ 
+Update the local Helm repository
+3.helm repo update
+ 
+Check whether the repo is added or not
+4.Helm repo list
+
+5.helm show values stable/redis  (It will show the configuration values)
+
+6.helm show values stable/redis > my-values.yaml
+ ( copying the helm values to a file which helps  modify the configuration file)
+
+7.helm install my-redis stable/redis -f values.yaml
+To install redid helm chart and to create pods
+
+
+8.export REDIS_PASSWORD=$(kubectl get secret --namespace redis my-redis -o jsonpath="{.data.redis-password}
+=>To retrieve  the password and export it to REDIS_PASSWORDvariable
+
+9.kubectl run --namespace redis my-redis-client --rm --tty -i --restart='Never' \
+    --env REDIS_PASSWORD=$REDIS_PASSWORD \
+   --image docker.io/bitnami/redis:5.0.7-debian-10-r32 -- bash
+ =>command creates a To Redis client pod that has access to the Redis server using the password stored in the REDIS_PASSWORD
+
+
+10.kubectl exec -it my-redis-client -- bash
+=> command used to acces second time to the reds client server
+
+11.redis-cli -h my-redis-master -a $REDIS_PASSWORD
+To connect and work with cache
+
