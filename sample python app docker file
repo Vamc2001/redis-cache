@@ -1,3 +1,20 @@
-creation of dockerfile for python applicatyion
+creation of dockerfile for python application
 
-
+DOCKERFILE
+FROM python:3.11-slim
+ARG USERNAME=container-user
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN groupadd --gid $USER_GID $USERNAME \ 
+&& useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
+RUN chown -R $USER_UID:$USER_GID /usr/local/lib/python3.11
+RUN chown -R $USER_UID:$USER_GID /usr/local/bin
+USER $USERNAME
+ENV PATH=$PATH:/home/$USERNAME/local/bin
+RUN mkdir -p /home/$USERNAME/vamc-app(custom-directory)
+WORKDIR /home/$USERNAME/vamc-app(custom-directory)
+COPY /app ./app(based on the code)
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--reload"] (it based on the command run in the local by the devloper
