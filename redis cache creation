@@ -36,6 +36,9 @@ To install redid helm chart and to create pods
 10.kubectl exec -it my-redis-client -- bash
 => command used to acces second time to the reds client server
 
+11. helm uninstall my-redis 
+=>to uninstall the release
+
 11.redis-cli -h my-redis-master -a $REDIS_PASSWORD
 To connect and work with cache
 
